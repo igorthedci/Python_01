@@ -6,7 +6,7 @@
 a,b,c = 123,267,214
 if (a + b <= c) or (b + c <= a) or (c + a <= b):
   valid = "NO"
-else
+else:
   valid = "YES"
 print(valid)
 
