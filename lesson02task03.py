@@ -8,4 +8,10 @@
 #
 year = 2047
 condition = (year % 4 == 0) and (year % 100 != 0) or (year % 400 == 0)
-print(str(year) + " год - это " + ("" if condition else "не ") + "високосный год")
+if condition:
+    nnn = ""
+else:
+    nnn = "не"
+print(year, "-- это", nnn, "високосный год")
+
+# print(str(year) + " год - это " + ("" if condition else "не ") + "високосный год")
