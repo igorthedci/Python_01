@@ -6,6 +6,8 @@
 # e.g. [(1, 7), (1, 3), (3, 4, 5), (2, 2)] yields
 # [(2, 2), (1, 3), (3, 4, 5), (1, 7)]
 # Hint: use sorted() function and a custom key= function to extract the last element form each tuple.
+
+
 def take_last(elem):
     return elem[-1]
 
