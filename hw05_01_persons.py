@@ -63,6 +63,8 @@ class Employee(Person):
 
     def increment(self, value):
         self.salary += value
+        if self.salary < 0:
+            self.salary = 0
 
     def exp_pos(self):
         prefix = 'Senior' if self.experience >= 6 \
@@ -91,10 +93,18 @@ class ITEmployee(Employee):
     def __init__(self, full_name='', birth_year=0, position='', salary=0, experience=0, *skills):
         super().__init__(full_name=full_name, birth_year=birth_year,
                          position=position, salary=salary, experience=experience)
-        self.skills = list(skills)
+        self.skills = list(*skills)
 
-    def add_skill(self, new_skill):
-        self.skills.append(new_skill)
+    def add_skill(self, new_skill=''):
+        if not new_skill:
+            return
+        try:
+            if self.skills.index(new_skill) >= 0:
+                return
+        except:
+            self.skills.append(new_skill)
+            return
+            # self.skills = []
 
     def add_skills(self, *new_skills):
         for item in new_skills:

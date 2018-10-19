@@ -17,7 +17,7 @@ def play_song(num=3, leng=3, endcode=0):
         print(*line, sep='-', end=endline + '\n')
 
 
-def play_line(leng = 3, endcode = 0):
+def play_line(leng=3, endcode=0):
     """
 # Функция генерирует строку la-la-la.
 # Функция принимает 1 аргумент:
@@ -27,5 +27,6 @@ def play_line(leng = 3, endcode = 0):
     print(*line, sep='-')
 
 
-play_song()
-play_song(endcode = 1)
+if __name__ == '__main__':
+    play_song()
+    play_song(endcode=1)
