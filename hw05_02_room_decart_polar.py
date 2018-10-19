@@ -49,8 +49,7 @@ class Decart_Point:
         """
         length = self.distance_origin()
         radian = math.atan2(self.y, self.x)
-        # self.x, self.y = length, radian
-        self = Decart_Point(length, radian)
+        self.x, self.y = length, radian
 
     def polar_to_decart(self):
         """
@@ -69,9 +68,11 @@ if __name__ == '__main__':
 #
     dot1 = Decart_Point(5, 12)
     dot2 = Decart_Point(-12, 3)
-    print('точка {}: расстояние до начала коордиинат = {}'.format(str(dot1), dot1.distance_origin()))
+    print('точка {}: расстояние до начала координат = {}'.format(str(dot1), dot1.distance_origin()))
     print('точка {}: расстояние до точки {} = {}'.format(str(dot1), str(dot2), dot1.distance_two_dots(dot2)))
     print('Расстояние в другую сторону такое же = {}'.format(dot2.distance_two_dots(dot1)))
-    print('Декартовы координаты точки = {}'.format(str(dot1)))
-    print('Полярные координаты точки = {}'.format(str(dot1.decart_to_polar())))
-    print('И снова декартовы координаты точки = {}'.format(str(dot1.polar_to_decart())))
+    print('Декартовы координаты точки = {}'.format(str(dot2)))
+    dot2.decart_to_polar()
+    print('Полярные координаты точки = {}'.format(str(dot2)))
+    dot2.polar_to_decart()
+    print('И снова декартовы координаты точки = {}'.format(str(dot2)))
