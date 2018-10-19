@@ -20,7 +20,7 @@ class Person:
             raise ValueError('Incorrect full_name. Required format: two words.')
         self.full_name = full_name
         current_year = datetime.datetime.now().year
-        if birth_year > current_year || birth_year < 1900:
+        if current_year < birth_year < 1900:
             raise ValueError('Incorrect birth_year. Required value between 1900 and ' + str(current_year))
         self.birth_year = birth_year
 
@@ -55,8 +55,8 @@ class Employee(Person):
     (добавляются свойства:
     1) должность, 2) опыт работы, 3) зарплата)
     """
-    def __init__(self, position=None, salary=0, experience=0, *args, **kwargs):
-        super().__init__(full_name=full_name, birth_year=birth_year) # !!!!!  SELF is absent
+    def __init__(self, full_name='', birth_year=0, position='', salary=0, experience=0):
+        super().__init__(full_name=full_name, birth_year=birth_year)
         self.position = position
         self.salary = salary
         self.experience = experience
@@ -65,10 +65,16 @@ class Employee(Person):
         self.salary += value
 
     def exp_pos(self):
-        prefix = 'Senior' if self.experience >= 6:
-                          else 'Middle' if self.experience >=3:
-                              else 'Junior'
+        prefix = 'Senior' if self.experience >= 6 \
+            else ('Middle' if self.experience >= 3 else 'Junior')
         return prefix + ' ' + self.position
+
+    def __str__(self):
+        """ преобразование объекта в строку """
+        return "<Employee object:: full_name:{} birth_year:{}\n " \
+               "position:{} salary:{} experince:{}>"\
+            .format(self.full_name, self.birth_year,
+                    self.exp_pos(), self.salary, self.experience)
 
 
 class ITEmployee(Employee):
@@ -82,8 +88,9 @@ class ITEmployee(Employee):
     расширяете список-свойство skill, или вы принимаете неопределённое количество
     аргументов, и все их добавляете в список-свойство skill
     """
-    def __init__(self, *skills, *args, **kwargs):
-        super().__init__(position=position, salary=salary, experience=experience, *args, **kwargs) # !!!!!  SELF is absent
+    def __init__(self, full_name='', birth_year=0, position='', salary=0, experience=0, *skills):
+        super().__init__(full_name=full_name, birth_year=birth_year,
+                         position=position, salary=salary, experience=experience)
         self.skills = list(skills)
 
     def add_skill(self, new_skill):
@@ -93,12 +100,27 @@ class ITEmployee(Employee):
         for item in new_skills:
             self.skills.append(item)
 
+    def __str__(self):
+        """ преобразование объекта в строку """
+        return "<ITEmployee object:: full_name:{} birth_year:{}\n" \
+               "position:{} salary:{} experince:{}\n" \
+               "skills:{}>"\
+            .format(self.full_name, self.birth_year,
+                    self.exp_pos(), self.salary, self.experience, self.skills)
+
 
 if __name__ == '__main__':
-    neo = Person(full_name = 'Neo Anderson', birth_year = 1999)
+    neo = Person(full_name='Neo Anderson', birth_year=1999)
     print(neo.first_name())
     print(neo.sur_name())
     neo.age_in()
     print(neo.birth_year)
+    print(str(neo))
+#
+    roger = Employee(full_name='Roger Wilco', birth_year=1986, position='Janitor', experience=12)
+    print(str(roger))
+#
+    neo = ITEmployee(full_name='Neo Anderson', birth_year=1999, position='Chosen', experience=1)
+    neo.add_skills('cool', 'smart')
     print(str(neo))
 #
