@@ -25,12 +25,14 @@ def random_tuple(max_l = 2, max_h = 10):
     return atuple
 
 
-array_length = 10
-random_list = [random_tuple(3) for x in range(array_length)]
-sorted_list = sort_last(random_list)
-print('{:<20}{:<20}'.format('Random list', 'Sorted list'))
-for i in range (array_length):
-    str1 = '[' + ' ,'.join(str(x) for x in random_list[i]) + ']'
-    str2 = '[' + ' ,'.join(str(x) for x in sorted_list[i]) + ']'
-    print('{:<20}{:<20}'.format(str1, str2))
+if __name__ == '__main__':
+#
+    array_length = 10
+    random_list = [random_tuple(3) for x in range(array_length)]
+    sorted_list = sort_last(random_list)
+    print('{:<20}{:<20}'.format('Random list', 'Sorted list'))
+    for i in range(array_length):
+        str1 = '[' + ' ,'.join(str(x) for x in random_list[i]) + ']'
+        str2 = '[' + ' ,'.join(str(x) for x in sorted_list[i]) + ']'
+        print('{:<20}{:<20}'.format(str1, str2))
 

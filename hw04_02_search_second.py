@@ -15,9 +15,10 @@ def second_max(*nums):
     nums.sort()
     return nums[-2]
 
-
-nums = [math.floor(random.random() * 100.) for i in range(20)]
-print(nums)
-second = second_max(*nums)
-print(nums)
-print(second)
+if __name__ == '__main__':
+#
+    nums = [math.floor(random.random() * 100.) for i in range(20)]
+    print(nums)
+    second = second_max(*nums)
+    print(nums)
+    print(second)

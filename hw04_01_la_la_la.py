@@ -12,7 +12,7 @@ def play_song(num=3, leng=3, endcode=0):
     """
     endchar = '.' if endcode == 0 else '!'
     line = ['la' for i in range(leng)]
-    for i in range (num):
+    for i in range(num):
         endline = endchar if i == num - 1 else ''
         print(*line, sep='-', end=endline + '\n')
 
