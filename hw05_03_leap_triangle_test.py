@@ -85,16 +85,17 @@ class TypeTriangleTests(unittest.TestCase):
     print('type_triangle({}) -> {}'.format((1, 2, 2), type_triangle(1, 2, 2)))
     print('type_triangle({}) -> {}'.format((4, 3, 2), type_triangle(4, 3, 2)))
     """
-    NO_TRIANGLE = 'Not a triangle'
-    VERSATILE = 'Versatile triangle'
-    ISOSCELES = 'Isosceles triangle'
-    EQUILATERAL = 'Equilateral triangle'
+    def setUp(self):
+        NO_TRIANGLE = 'Not a triangle'
+        VERSATILE = 'Versatile triangle'
+        ISOSCELES = 'Isosceles triangle'
+        EQUILATERAL = 'Equilateral triangle'
 #
     def test_01(self):
         self.assertEqual(NO_TRIANGLE, MyTriangle(1, 1, 3).type_triangle())
-        self.assertEqual(NO_TRIANGLE, MyTriangle(1, 1, 1).type_triangle())
-        self.assertEqual(NO_TRIANGLE, MyTriangle(1, 2, 2).type_triangle())
-        self.assertEqual(NO_TRIANGLE, MyTriangle(4, 3, 2).type_triangle())
+        self.assertEqual(EQUILATERAL, MyTriangle(1, 1, 1).type_triangle())
+        self.assertEqual(ISOSCELES, MyTriangle(1, 2, 2).type_triangle())
+        self.assertEqual(VERSATILE, MyTriangle(4, 3, 2).type_triangle())
 
 
 if __name__ == '__main__':

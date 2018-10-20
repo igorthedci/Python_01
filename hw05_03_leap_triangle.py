@@ -104,7 +104,7 @@ class MyTriangle:
         return ISOSCELES
 
     def run_log(self, proc):
-        print('{}({}) -> {}'.format(proc, self.args, self.proc()))
+        print('{}({}) -> {}'.format(proc, self.args, MyTriangle().proc()))
 
 
 if __name__ == '__main__':
