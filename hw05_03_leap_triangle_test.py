@@ -72,30 +72,33 @@ class IsTriangleTests(unittest.TestCase):
     print('is_triangle({}) -> {}'.format((1, 1, 3), is_triangle(1, 1, 3)))
     print('is_triangle({}) -> {}'.format((1, 1, 1), is_triangle(1, 1, 1)))
     """
-#    print(args, len(args), type(args))
-
     def test_01(self):
+        self.assertEqual(False, MyTriangle().is_triangle())
         self.assertEqual(False, MyTriangle('a').is_triangle())
+        self.assertEqual(False, MyTriangle(1).is_triangle())
+        self.assertEqual(False, MyTriangle(1, 1, 0).is_triangle())
+        self.assertEqual(False, MyTriangle(1, 1, -1).is_triangle())
+        self.assertEqual(False, MyTriangle(1, 1, 3).is_triangle())
+        self.assertEqual(True, MyTriangle(1, 1, 1).is_triangle())
 
 
 class TypeTriangleTests(unittest.TestCase):
+#
+    NO_TRIANGLE = 'Not a triangle'
+    VERSATILE = 'Versatile triangle'
+    ISOSCELES = 'Isosceles triangle'
+    EQUILATERAL = 'Equilateral triangle'
     """
     print('type_triangle({}) -> {}'.format((1, 1, 3), type_triangle(1, 1, 3)))
     print('type_triangle({}) -> {}'.format((1, 1, 1), type_triangle(1, 1, 1)))
     print('type_triangle({}) -> {}'.format((1, 2, 2), type_triangle(1, 2, 2)))
     print('type_triangle({}) -> {}'.format((4, 3, 2), type_triangle(4, 3, 2)))
     """
-    def setUp(self):
-        NO_TRIANGLE = 'Not a triangle'
-        VERSATILE = 'Versatile triangle'
-        ISOSCELES = 'Isosceles triangle'
-        EQUILATERAL = 'Equilateral triangle'
-#
     def test_01(self):
-        self.assertEqual(NO_TRIANGLE, MyTriangle(1, 1, 3).type_triangle())
-        self.assertEqual(EQUILATERAL, MyTriangle(1, 1, 1).type_triangle())
-        self.assertEqual(ISOSCELES, MyTriangle(1, 2, 2).type_triangle())
-        self.assertEqual(VERSATILE, MyTriangle(4, 3, 2).type_triangle())
+        self.assertEqual(self.NO_TRIANGLE, MyTriangle(1, 1, 3).type_triangle())
+        self.assertEqual(self.EQUILATERAL, MyTriangle(1, 1, 1).type_triangle())
+        self.assertEqual(self.ISOSCELES, MyTriangle(1, 2, 2).type_triangle())
+        self.assertEqual(self.VERSATILE, MyTriangle(4, 3, 2).type_triangle())
 
 
 if __name__ == '__main__':

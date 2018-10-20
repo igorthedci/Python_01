@@ -50,8 +50,12 @@ class MyYear:
     #     print('{}({}) -> {}'.format(proc, self.args, self.proc()))
 
 
-
 class MyTriangle:
+
+    NO_TRIANGLE = 'Not a triangle'
+    VERSATILE = 'Versatile triangle'
+    ISOSCELES = 'Isosceles triangle'
+    EQUILATERAL = 'Equilateral triangle'
 
     def __init__(self, *args):
         self.args = list(args)
@@ -89,22 +93,17 @@ class MyTriangle:
         :param args:
         :return:
         """
-        NO_TRIANGLE = 'Not a triangle'
-        VERSATILE = 'Versatile triangle'
-        ISOSCELES = 'Isosceles triangle'
-        EQUILATERAL = 'Equilateral triangle'
-    #
         if not self.is_triangle():
-            return NO_TRIANGLE
+            return self.NO_TRIANGLE
         a, b, c = int(self.args[0]), int(self.args[1]), int(self.args[2])
         if a == b == c:
-            return EQUILATERAL
+            return self.EQUILATERAL
         if a != b != c != a:
-            return VERSATILE
-        return ISOSCELES
+            return self.VERSATILE
+        return self.ISOSCELES
 
-    def run_log(self, proc):
-        print('{}({}) -> {}'.format(proc, self.args, MyTriangle().proc()))
+    # def run_log(self, proc):
+    #     print('{}({}) -> {}'.format(proc, self.args, MyTriangle().proc()))
 
 
 if __name__ == '__main__':
@@ -120,12 +119,6 @@ if __name__ == '__main__':
     MyYear(400).is_year_leap(log=True)
     MyYear(2000).is_year_leap(log=True)
     MyYear(2000).is_year_leap()
-    # print('is_year_leap({}) -> {}'.format(0, HW_05_03.is_year_leap()))
-    # print('is_year_leap({}) -> {}'.format(1, HW_05_03.is_year_leap()))
-    # print('is_year_leap({}) -> {}'.format(4, HW_05_03.is_year_leap(4)))
-    # print('is_year_leap({}) -> {}'.format(100, HW_05_03.is_year_leap(100)))
-    # print('is_year_leap({}) -> {}'.format(400, HW_05_03.is_year_leap(400)))
-    # print('is_year_leap({}) -> {}'.format(2000, HW_05_03.is_year_leap(2000)))
 #
     print('is_triangle({}) -> {}'.format('a', MyTriangle('a').is_triangle()))
     print('is_triangle({}) -> {}'.format(1, MyTriangle(1).is_triangle()))
