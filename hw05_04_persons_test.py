@@ -10,21 +10,12 @@ from hw05_01_persons import Person, Employee, ITEmployee
 
 class PersonTests(unittest.TestCase):
 
-    def setUp(self):
-        self.somebody = Person(full_name='Roger Wilco', birth_year=1986)
-        pass
-
     def test_01(self):
-        self.assertEqual(self.somebody.full_name, 'Roger Wilco')
-
-    def test_02(self):
-        self.assertEqual(self.somebody.birth_year, 1986)
-
-    def test_03(self):
-        self.assertEqual(self.somebody.first_name(), 'Roger')
-
-    def test_04(self):
-        self.assertEqual(self.somebody.sur_name(), 'Wilco')
+        somebody = Person(full_name='Roger Wilco', birth_year=1986)
+        self.assertEqual(somebody.full_name, 'Roger Wilco')
+        self.assertEqual(somebody.birth_year, 1986)
+        self.assertEqual(somebody.first_name(), 'Roger')
+        self.assertEqual(somebody.sur_name(), 'Wilco')
 
 
 class EmployeeTests(unittest.TestCase):
@@ -86,7 +77,7 @@ class ITEmployeeTests(unittest.TestCase):
         self.somebody.add_skills('smart', 'cool')
         self.assertEqual(['smart', 'cool'], self.somebody.skills)
 
-#
+
 if __name__ == '__main__':
     unittest.main()
 #

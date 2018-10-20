@@ -9,7 +9,7 @@ class Person:
     2) год рождения).
     """
 
-    def __init__(self, full_name='', birth_year=0):
+    def __init__(self, full_name=None, birth_year=None):
         """
     ** (только для продвинутых) в конструкторе проверить, что в full_name
     передаётся строка, состоящая из двух слов, если нет, вызывайте исключение
@@ -20,9 +20,12 @@ class Person:
             raise ValueError('Incorrect full_name. Required format: two words.')
         self.full_name = full_name
         current_year = datetime.datetime.now().year
-        if 1900 < birth_year < current_year:
+        if not birth_year:
+            self.birth_year = birth_year
+        elif 1900 <= birth_year <= current_year:
+            self.birth_year = birth_year
+        else:
             raise ValueError('Incorrect birth_year. Required value between 1900 and ' + str(current_year))
-        self.birth_year = birth_year
 
     def first_name(self):
         # print(self)
@@ -46,7 +49,7 @@ class Person:
 
     def __str__(self):
         """ преобразование объекта в строку """
-        return "<Person object:: full_name: {} birth_year: {}>".format(self.full_name, self.birth_year)
+        return "<PERSON object:: full_name:{}, birth_year:{}>".format(self.full_name, self.birth_year)
 
 
 class Employee(Person):
@@ -73,7 +76,7 @@ class Employee(Person):
 
     def __str__(self):
         """ преобразование объекта в строку """
-        return "<Employee object:: full_name:{} birth_year:{}\n " \
+        return "<EMPLOYEE object:: full_name:{} birth_year:{}\n " \
                "position:{} salary:{} experince:{}>"\
             .format(self.full_name, self.birth_year,
                     self.exp_pos(), self.salary, self.experience)
@@ -112,7 +115,7 @@ class ITEmployee(Employee):
 
     def __str__(self):
         """ преобразование объекта в строку """
-        return "<ITEmployee object:: full_name:{} birth_year:{}\n" \
+        return "<ITEMPLOYEE object:: full_name:{} birth_year:{}\n" \
                "position:{} salary:{} experince:{}\n" \
                "skills:{}>"\
             .format(self.full_name, self.birth_year,
