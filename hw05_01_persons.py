@@ -20,7 +20,7 @@ class Person:
             raise ValueError('Incorrect full_name. Required format: two words.')
         self.full_name = full_name
         current_year = datetime.datetime.now().year
-        if current_year < birth_year < 1900:
+        if 1900 < birth_year < current_year:
             raise ValueError('Incorrect birth_year. Required value between 1900 and ' + str(current_year))
         self.birth_year = birth_year
 
