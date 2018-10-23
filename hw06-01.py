@@ -28,10 +28,15 @@ hero_01_id = 12
 
 # ● Проверяете, что он создался и доступен по ссылке GET /roles/[id]
 hero_test_url = url_roles+'/'+str(hero_01_id)
-print(hero_test_url)
-hero_test = requests.get(hero_test_url).text
-print(hero_test)
-print( hero_test == hero_01 )
+# print(hero_test_url)
+hero_test = requests.get(hero_test_url).json()
+marker = True
+for key in hero_01:
+    if key not in hero_test or hero_01[key] != hero_test[key]:
+        marker = False
+        break
+print(marker)
+
 # r2 = requests.delete(url_books+'/'+str(r_dict['id']))
 # print(r2.status_code)
 # print(r2.url)
