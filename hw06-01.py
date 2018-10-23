@@ -44,13 +44,13 @@ if __name__ == '__main__':
     hero_01_id = 12
     # print(hero_01_id)
 
-    # ● Проверяете, что он создался и доступен по ссылке GET /roles/[id]
+# ● Проверяете, что он создался и доступен по ссылке GET /roles/[id]
     hero_test_url = url_roles+'/'+str(hero_01_id)
     hero_test = requests.get(hero_test_url).json()
     marker = dict_contains(hero_test, hero_01)
     print('Персонаж', 'создан' if marker else 'отсутствует')
 
-    # ● Проверяете, что он есть в списке пользователей по GET /roles/
+# ● Проверяете, что он есть в списке персонажей по GET /roles/
     hero_test_url = url_roles
     hero_arr = requests.get(hero_test_url).json()
     marker = False
@@ -60,7 +60,12 @@ if __name__ == '__main__':
             break
     print('Персонаж', 'создан' if marker else 'отсутствует')
 
-    # ● Изменяете этого пользователя методом PUT roles/[id]/
+# ● Изменяете этого персонажа методом PUT roles/[id]/
+# hero_01 = {'name': 'Name1', 'type': 'type1', 'level': 1, 'book': 2}
+    hero_test_url = url_roles+'/'+str(hero_01_id)
+    hero_test = requests.put(hero_test_url).json()
+    marker = dict_contains(hero_test, hero_01)
+    print('Персонаж', 'создан' if marker else 'отсутствует')
 
 
     #
