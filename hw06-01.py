@@ -52,10 +52,11 @@ if __name__ == '__main__':
         if marker: break
     print('Персонаж', 'существует' if marker else 'отсутствует.')
 
-    # r2 = requests.delete(url_books+'/'+str(r_dict['id']))
-    # print(r2.status_code)
-    # print(r2.url)
-    # print(r2.json())
-    # r2_dict = r2.json()
-    # print(r2_dict)
+# 4● Изменяете этого персонажа методом PUT roles/[id]/
+    hero_01 = {'name': 'Name1new', 'type': 'type1new', 'level': 2, 'book': 2}
+    hero_test_url = url_roles+'/'+str(hero_01_id)
+    hero_test = requests.put(hero_test_url, hero_01).json()
+    marker = dict_contains(hero_test, hero_01)
+    print('Персонаж', 'обновлен' if marker else 'остался прежним.')
+
 
