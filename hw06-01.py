@@ -76,5 +76,4 @@ if __name__ == '__main__':
 # 7● Удаляете этого персонажа методом DELETE roles/[id]
     hero_test_url = url_roles+'/'+str(hero_01_id)
     hero_test = requests.delete(hero_test_url)
-    print(hero_test.status_code)
-    print('Изменение', 'правильно.' if marker else 'отсутствует.')
+    print('Персонаж', hero_01_id, 'удален.' if hero_test.status_code == 204 else 'выжил.')
