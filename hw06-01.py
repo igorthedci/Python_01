@@ -34,9 +34,9 @@ if __name__ == '__main__':
 
 # 1● Создаёт персонажа POST /roles/, вы запоминаете его id.
     hero_01 = {'name': 'Name1', 'type': 'type1', 'level': 1, 'book': 2}
-    # hero_01_id = r.json()['id']
-    # print(hero_01_id)
-    hero_01_id = 12
+    hero_01_id = requests.post(url_roles, hero_01).json()['id']
+    print('Создан персонаж с номером', hero_01_id)
+#    hero_01_id = 12
 
 # 2● Проверяете, что он создался и доступен по ссылке GET /roles/[id]
     hero_test_url = url_roles+'/'+str(hero_01_id)
@@ -59,4 +59,22 @@ if __name__ == '__main__':
     marker = dict_contains(hero_test, hero_01)
     print('Персонаж', 'обновлен' if marker else 'остался прежним.')
 
+# 5● Проверяете, что он изменился и доступен по ссылке /roles/[id]
+    hero_test_url = url_roles+'/'+str(hero_01_id)
+    hero_test = requests.get(hero_test_url).json()
+    marker = dict_contains(hero_test, hero_01)
+    print('Изменение', 'правильно.' if marker else 'отсутствует.')
 
+# 6● Проверяете, что он есть в списке персонажа по GET /roles/ с новой инфой
+    hero_list = requests.get(url_roles).json()
+    marker = False
+    for hero_test in hero_list:
+        marker = dict_contains(hero_test, hero_01)
+        if marker: break
+    print('Изменение', 'правильно.' if marker else 'отсутствует.')
+
+# 7● Удаляете этого персонажа методом DELETE roles/[id]
+    hero_test_url = url_roles+'/'+str(hero_01_id)
+    hero_test = requests.delete(hero_test_url)
+    print(hero_test.status_code)
+    print('Изменение', 'правильно.' if marker else 'отсутствует.')
