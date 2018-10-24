@@ -2,50 +2,60 @@ import requests
 """
 Тестовое приложение с REST API ​ ttp://pulse-rest-testing.herokuapp.com/
 Создаём один скрипт:
-● Создаёт персонажа POST /roles/, вы запоминаете его id.
-● Проверяете, что он создался и доступен по ссылке GET /roles/[id]
-● Проверяете, что он есть в списке пользователей по GET /roles/
-● Изменяете этого пользователя методом PUT roles/[id]/
-● Проверяете, что он изменился и доступен по ссылке /roles/[id]
-● Проверяете, что он есть в списке пользователей по GET /roles/ с новой инфой
-● Удаляете этого пользователя методом DELETE roles/[id]
-● Второй скрипт: тоже самое с книгами
+1● Создаёт персонажа POST /roles/, вы запоминаете его id.
+2● Проверяете, что он создался и доступен по ссылке GET /roles/[id]
+3● Проверяете, что он есть в списке персонажа по GET /roles/
+4● Изменяете этого персонажа методом PUT roles/[id]/
+5● Проверяете, что он изменился и доступен по ссылке /roles/[id]
+6● Проверяете, что он есть в списке персонажа по GET /roles/ с новой инфой
+7● Удаляете этого персонажа методом DELETE roles/[id]
+8● Второй скрипт: тоже самое с книгами
 
    Попробуйте воспользоваться http.client вместо requests. Ощутите разницу
 """
-url_books = 'http://pulse-rest-testing.herokuapp.com/books'
-url_roles = 'http://pulse-rest-testing.herokuapp.com/roles'
 
-# ● Создаёт персонажа POST /roles/, вы запоминаете его id.
-hero_01 = {'name': 'Name1', 'type': 'type1', 'level': 1, 'book': 2}
-# r = requests.post(url_roles, data=hero_01)
-# print(r.status_code)
-# r_dict = r.json()
-# print(r_dict)
-# hero_01_id = r.json()['id']
-hero_01_id = 12
-# print(hero_01_id)
-
-# ● Проверяете, что он создался и доступен по ссылке GET /roles/[id]
-hero_test_url = url_roles+'/'+str(hero_01_id)
-# print(hero_test_url)
-hero_test = requests.get(hero_test_url).json()
-marker = True
-for key in hero_01:
-    if key not in hero_test or hero_01[key] != hero_test[key]:
-        marker = False
-        break
-print(marker)
-
-# r2 = requests.delete(url_books+'/'+str(r_dict['id']))
-# print(r2.status_code)
-# print(r2.url)
-# print(r2.json())
-# r2_dict = r2.json()
-# print(r2_dict)
-
+def dict_contains(a={}, b={}):
+    """
+    :param a: dictionary
+    :param b: dictionary
+    :return: TRUE if A-dict contains B-dict
+    """
+    result = True
+    for key in hero_01:
+        if key not in hero_test or hero_01[key] != hero_test[key]:
+            marker = False
+            break
+    return result
 
 if __name__ == '__main__':
-    pass
-#
-#
+
+    url_books = 'http://pulse-rest-testing.herokuapp.com/books'
+    url_roles = 'http://pulse-rest-testing.herokuapp.com/roles'
+
+# 1● Создаёт персонажа POST /roles/, вы запоминаете его id.
+    hero_01 = {'name': 'Name1', 'type': 'type1', 'level': 1, 'book': 2}
+    # hero_01_id = r.json()['id']
+    # print(hero_01_id)
+    hero_01_id = 12
+
+# 2● Проверяете, что он создался и доступен по ссылке GET /roles/[id]
+    hero_test_url = url_roles+'/'+str(hero_01_id)
+    hero_test = requests.get(hero_test_url).json()
+    marker = dict_contains(hero_test, hero_01)
+    print('Персонаж', 'существует' if marker else 'отсутствует.')
+
+# 3● Проверяете, что он есть в списке персонажа по GET /roles/
+    hero_list = requests.get(url_roles).json()
+    marker = False
+    for hero_test in hero_list:
+        marker = dict_contains(hero_test, hero_01)
+        if marker: break
+    print('Персонаж', 'существует' if marker else 'отсутствует.')
+
+    # r2 = requests.delete(url_books+'/'+str(r_dict['id']))
+    # print(r2.status_code)
+    # print(r2.url)
+    # print(r2.json())
+    # r2_dict = r2.json()
+    # print(r2_dict)
+
