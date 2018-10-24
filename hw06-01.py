@@ -2,24 +2,23 @@ import requests
 """
 Тестовое приложение с REST API ​ ttp://pulse-rest-testing.herokuapp.com/
 Создаём один скрипт:
-● Создаёт персонажа POST /roles/, вы запоминаете его id.
-● Проверяете, что он создался и доступен по ссылке GET /roles/[id]
-● Проверяете, что он есть в списке пользователей по GET /roles/
-● Изменяете этого пользователя методом PUT roles/[id]/
-● Проверяете, что он изменился и доступен по ссылке /roles/[id]
-● Проверяете, что он есть в списке пользователей по GET /roles/ с новой инфой
-● Удаляете этого пользователя методом DELETE roles/[id]
-● Второй скрипт: тоже самое с книгами
+1● Создаёт персонажа POST /roles/, вы запоминаете его id.
+2● Проверяете, что он создался и доступен по ссылке GET /roles/[id]
+3● Проверяете, что он есть в списке персонажа по GET /roles/
+4● Изменяете этого персонажа методом PUT roles/[id]/
+5● Проверяете, что он изменился и доступен по ссылке /roles/[id]
+6● Проверяете, что он есть в списке персонажа по GET /roles/ с новой инфой
+7● Удаляете этого персонажа методом DELETE roles/[id]
+8● Второй скрипт: тоже самое с книгами
 
-   Попробуйте воспользоваться http.client вместо requests. Ощутите разницу
+9● Попробуйте воспользоваться http.client вместо requests. Ощутите разницу
 """
 
 def dict_contains(a={}, b={}):
     """
-    the function checks A-dictionary contains B-dictionary
-    :param a:
-    :param b:
-    :return: TRUE if A contains B
+    :param a: dictionary
+    :param b: dictionary
+    :return: TRUE if A-dict contains B-dict
     """
     result = True
     for key in b:
@@ -28,45 +27,96 @@ def dict_contains(a={}, b={}):
             break
     return result
 
-
 if __name__ == '__main__':
 
     url_books = 'http://pulse-rest-testing.herokuapp.com/books'
     url_roles = 'http://pulse-rest-testing.herokuapp.com/roles'
 
-    # ● Создаёт персонажа POST /roles/, вы запоминаете его id.
+# 1● Создаёт персонажа POST /roles/, вы запоминаете его id.
     hero_01 = {'name': 'Name1', 'type': 'type1', 'level': 1, 'book': 2}
-    # r = requests.post(url_roles, data=hero_01)
-    # print(r.status_code)
-    # r_dict = r.json()
-    # print(r_dict)
-    # hero_01_id = r.json()['id']
-    hero_01_id = 12
-    # print(hero_01_id)
+    hero_01_id = requests.post(url_roles, hero_01).json()['id']
+    print('Создан персонаж с номером', hero_01_id)
+#    hero_01_id = 12
 
-# ● Проверяете, что он создался и доступен по ссылке GET /roles/[id]
-    hero_test_url = url_roles+'/'+str(hero_01_id)
+# 2● Проверяете, что он создался и доступен по ссылке GET /roles/[id]
+    hero_test_url = url_roles + '/' + str(hero_01_id)
     hero_test = requests.get(hero_test_url).json()
     marker = dict_contains(hero_test, hero_01)
-    print('Персонаж', 'создан' if marker else 'отсутствует')
+    print('Персонаж', 'существует' if marker else 'отсутствует.')
 
-# ● Проверяете, что он есть в списке персонажей по GET /roles/
-    hero_test_url = url_roles
-    hero_arr = requests.get(hero_test_url).json()
+# 3● Проверяете, что он есть в списке персонажа по GET /roles/
+    hero_list = requests.get(url_roles).json()
     marker = False
-    for hero_test in hero_arr:
+    for hero_test in hero_list:
         marker = dict_contains(hero_test, hero_01)
-        if marker:
-            break
-    print('Персонаж', 'создан' if marker else 'отсутствует')
+        if marker: break
+    print('Персонаж', 'существует' if marker else 'отсутствует.')
 
-# ● Изменяете этого персонажа методом PUT roles/[id]/
-# hero_01 = {'name': 'Name1', 'type': 'type1', 'level': 1, 'book': 2}
-    hero_test_url = url_roles+'/'+str(hero_01_id)
-    hero_test = requests.put(hero_test_url).json()
+# 4● Изменяете этого персонажа методом PUT roles/[id]/
+    hero_01 = {'name': 'Name1new', 'type': 'type1new', 'level': 2, 'book': 2}
+    hero_test_url = url_roles + '/' + str(hero_01_id)
+    hero_test = requests.put(hero_test_url, hero_01).json()
     marker = dict_contains(hero_test, hero_01)
-    print('Персонаж', 'создан' if marker else 'отсутствует')
+    print('Персонаж', 'обновлен' if marker else 'остался прежним.')
 
+# 5● Проверяете, что он изменился и доступен по ссылке /roles/[id]
+    hero_test_url = url_roles + '/' + str(hero_01_id)
+    hero_test = requests.get(hero_test_url).json()
+    marker = dict_contains(hero_test, hero_01)
+    print('Изменение', 'правильно.' if marker else 'отсутствует.')
 
-    #
-    #
+# 6● Проверяете, что он есть в списке персонажа по GET /roles/ с новой инфой
+    hero_list = requests.get(url_roles).json()
+    marker = False
+    for hero_test in hero_list:
+        marker = dict_contains(hero_test, hero_01)
+        if marker: break
+    print('Изменение', 'правильно.' if marker else 'отсутствует.')
+
+# 7● Удаляете этого персонажа методом DELETE roles/[id]
+    hero_test_url = url_roles + '/' + str(hero_01_id)
+    hero_test = requests.delete(hero_test_url)
+    print('Персонаж', hero_01_id, 'удален.' if hero_test.status_code == 204 else 'выжил.')
+
+# 8● Второй скрипт: тоже самое с книгами
+    book_01 = {'title': 'New Book', 'author': 'New Author'}
+    book_01_id = requests.post(url_books, book_01).json()['id']
+#    book_01_id = 820
+    print('Создана книга с номером', book_01_id)
+#
+    book_test_url = url_books + '/' + str(book_01_id)
+    book_test = requests.get(book_test_url).json()
+    marker = dict_contains(book_test, book_01)
+    if not marker:
+        print('Запрос:', book_01)
+        print('Ответ:', book_test)
+    print('Книга', 'существует' if marker else 'отсутствует.')
+#
+    book_list = requests.get(url_books).json()
+    marker = False
+    for book_test in book_list:
+        marker = dict_contains(book_test, book_01)
+        if marker: break
+    print('Книга', 'существует' if marker else 'отсутствует.')
+#
+    book_01 = {'title': 'Next Book', 'author': 'Edition 2'}
+    book_test_url = url_books + '/' + str(book_01_id)
+    book_test = requests.put(book_test_url, book_01).json()
+    marker = dict_contains(book_test, book_01)
+    print('Книга', 'переписана' if marker else 'осталась прежней.')
+#
+    book_test_url = url_books + '/' + str(book_01_id)
+    book_test = requests.get(book_test_url).json()
+    marker = dict_contains(book_test, book_01)
+    print('Изменение', 'правильно.' if marker else 'отсутствует.')
+#
+    book_list = requests.get(url_books).json()
+    marker = False
+    for book_test in book_list:
+        marker = dict_contains(book_test, book_01)
+        if marker: break
+    print('Изменение', 'правильно.' if marker else 'отсутствует.')
+#
+    book_test_url = url_books+'/'+str(book_01_id)
+    book_test = requests.delete(book_test_url)
+    print('Книга', book_01_id, 'удалена.' if book_test.status_code == 204 else 'сохранилась.')
