@@ -12,6 +12,8 @@ if __name__ == '__main__':
 #
     in_file = r"./tmp/_salary.txt"
     out_file = r'./tmp/_salary_report.txt'
+    with open(out_file, 'wt', encoding='utf-8') as out_handle:
+        out_handle.close()
 #       in_handle = open(in_file, encoding='utf-8')
 #      out_handle = open(out_file, 'w', encoding='utf-8')
 #
@@ -26,8 +28,20 @@ if __name__ == '__main__':
             aline = aline.split(' ')
             arr_person.append( { key_id: aline[1]+'_'+aline[0], key_dept: aline[2], key_salary: aline[3] } )
 # 1 Посчитайте сколько отделов на фирме
-    arr_dept = []  # item = { id: counter, title: Отдел }
+    arr_dept = []  # item = [ Отдел ]
     for aperson in arr_person:
+        adept = aperson[key_dept]
+        if adept in arr_dept:
+            arr_dept.append(adept)
+#
+    with open(out_file, 'at', encoding='utf-8') as out_handle:
+        print("Количество отделов :", len(arr_dept), out_handle)
+        counter = 0
+        for adept in arr_dept:
+            print(counter+1, arr_dept[counter], file=out_handle)
+            counter += 1
+# 2 Определите максимальную зарплату
+
 
             arr_dept = []  # item of the array = {title : person_with_max_salary}
             for aperson in arr_person:
