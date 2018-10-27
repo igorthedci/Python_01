@@ -40,6 +40,7 @@ class BookTests(unittest.TestCase):
 #        self.assertEqual(book_data, response_body)
 #        self.assertDictContainsSubset(response_body, book_data)
         self.book_data['id'] = response_body['id']
+        self.assertEqual(response_body, self.book_data)
 
     def tearDown(self):
         response = requests.delete(self.test_url+'/'+str(self.book_id))
