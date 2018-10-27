@@ -82,7 +82,7 @@ if __name__ == '__main__':
         aname = list(aname.keys())[0]
         adept = name_dept[aname]
         asalary = int(name_salary[aname])
-        print(aname, adept)
+        print(aname, adept, asalary)
         if adept in dept_maxname:
             maxname = dept_maxname[adept]
             maxsalary = int(name_salary[maxname])
@@ -93,13 +93,14 @@ if __name__ == '__main__':
 #
 # 4 Выведите «Отдел Макс_Зарплата  Фамилия_человека_с_такой_зарплатой» в новый файл
     with open(out_file, 'a', encoding='utf-8') as out_handle:
-        print("\nМаксимальная зарплат по отделам", file=out_handle)
+        print("\nМаксимальная зарплата по отделам", file=out_handle)
         counter = 0
         for adept in dept_maxname:
             adept = list(adept.keys())[0]
             aname = dept_maxname[adept]
-            print(adept, aname)
-            print(counter + 1, adept, name_salary[aname], aname, file=out_handle)
+            asalary = int(name_salary[aname])
+            print(adept, asalary, aname)
+            print(counter + 1, adept, asalary, aname, file=out_handle)
             counter += 1
 #
 #
