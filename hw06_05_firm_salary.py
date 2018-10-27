@@ -34,38 +34,42 @@ if __name__ == '__main__':
 #      out_handle = open(out_file, 'w', encoding='utf-8')
 #
 #  чтение исходных данных
-    arr_person = []  # item = { id: Имя_Фамилия, dept: Отдел, salary: Зарплата }
+    name_dept = []  # item = {Имя_Фамилия: Отдел} }
+    name_salary = []  # item = {Имя_Фамилия: Зарплата} }
     with open(in_file, encoding='utf-8') as in_handle:
         aline = in_handle.readline().strip()
         titles = aline.split(' ')
-        key_id = titles[1] + '_' + titles[0]
-        key_dept = titles[2]
-        key_salary = titles[3]
-        print(key_id, key_dept, key_salary)
+        # key_id = titles[1] + '_' + titles[0]
+        # key_dept = titles[2]
+        # key_salary = titles[3]
+        # print(key_id, key_dept, key_salary)
         for aline in in_handle:
             aline = aline.strip().split(' ')
-            arr_person.append( { key_id: aline[1]+'_'+aline[0], key_dept: aline[2], key_salary: aline[3] } )
+            aname = aline[1] + '_' + aline[0]  # key = Имя_Фамилия
+            name_dept.append( {aname: aline[2]} )
+            name_salary.append( {aname: aline[3]} )
 #
 # 1 Посчитайте сколько отделов на фирме
     arr_dept = []  # item = [ Отдел ]
-    for aperson in arr_person:
-        adept = aperson[key_dept]
+    for adept in name_dept:
+        print(adept)
+        dept = list(adept.values())[0]
         if adept not in arr_dept:
             arr_dept.append(adept)
-    pass
 #
     with open(out_file, 'a', encoding='utf-8') as out_handle:
         print("Количество отделов :", len(arr_dept), file=out_handle)
         counter = 0
         for adept in arr_dept:
-            print(counter+1, arr_dept[counter], file=out_handle)
+            print(counter+1, dept, file=out_handle)
             counter += 1
 #
 # 2 Определите максимальную зарплату
     salary_max = 0
-    for aperson in arr_person:
-        if salary_max < int(aperson[key_salary]):
-            salary_max = int(aperson[key_salary])
+    for aname in name_salary:
+        asalary = int(list(aname.values())[0])
+        if salary_max < asalary:
+            salary_max = asalary
 #
     with open(out_file, 'a', encoding='utf-8') as out_handle:
         print("\nМаксимальная зарплата на фирме :", salary_max, file=out_handle)
@@ -73,23 +77,29 @@ if __name__ == '__main__':
 # 3 Определите максимальную зарплату в каждом отделе
 # 4 Выведите «Отдел Макс_Зарплата  Фамилия_человека_с_такой_зарплатой» в новый файл
 # (составляется список {отдел : сотрудник_с максимальной_зарплатой}
-    salary_max = []  # item = { key: dept, value: Имя_Фамилия }
-    for aperson in arr_person:
-        if aperson[key_dept] not in salary_max:
-            salary_max.append( { aperson[key_dept]: aperson[key_id]} )
+    dept_maxname = []  # item = { key: dept, value: Имя_Фамилия_с_макс_зарплатой }
+    for aname in name_dept:
+        aname = list(aname.keys())[0]
+        adept = name_dept[aname]
+        asalary = int(name_salary[aname])
+        print(aname, adept)
+        if adept in dept_maxname:
+            maxname = dept_maxname[adept]
+            maxsalary = int(name_salary[maxname])
+            if asalary > maxsalary:
+                dept_maxname[adept] = aname
         else:
-            adept = aperson[key_dept]
-            aname = salary_max[adept]
-            if aperson[key_salary] > arr_person[aname][key_salary]:
-                salary_max[adept] = aname
+            dept_maxname.append( {adept: aname} )
 #
+# 4 Выведите «Отдел Макс_Зарплата  Фамилия_человека_с_такой_зарплатой» в новый файл
     with open(out_file, 'a', encoding='utf-8') as out_handle:
         print("\nМаксимальная зарплат по отделам", file=out_handle)
         counter = 0
-        for adept in salary_max:
-            print(adept)
-            aname = str(adept.values())
-            print(counter + 1, adept.keys(), arr_person[aname].get(key_salary), aname, file=out_handle)
+        for adept in dept_maxname:
+            adept = list(adept.keys())[0]
+            aname = dept_maxname[adept]
+            print(adept, aname)
+            print(counter + 1, adept, name_salary[aname], aname, file=out_handle)
             counter += 1
 #
 #
