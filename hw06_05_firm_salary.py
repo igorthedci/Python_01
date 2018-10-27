@@ -22,7 +22,7 @@ if __name__ == '__main__':
         print(str(titles), file=in_handle)
         for i in range(counter):
             lastname = 'Name_' + str(random.randrange(100))
-            firstname = 'Name_' + str(random.randrange(101,120))
+            firstname = 'Name_' + str(random.randrange(101, 120))
             dept = 'Department_' + str(random.randrange(10))
             salary = random.randrange(2000, 8000)
             print(lastname, firstname, dept, salary, file=in_handle)
