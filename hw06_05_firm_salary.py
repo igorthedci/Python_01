@@ -34,8 +34,8 @@ if __name__ == '__main__':
 #      out_handle = open(out_file, 'w', encoding='utf-8')
 #
 #  чтение исходных данных
-    name_dept = []  # item = {Имя_Фамилия: Отдел} }
-    name_salary = []  # item = {Имя_Фамилия: Зарплата} }
+    name_dept = {}  # item = {Имя_Фамилия: Отдел} }
+    name_salary = {}  # item = {Имя_Фамилия: Зарплата} }
     with open(in_file, encoding='utf-8') as in_handle:
         aline = in_handle.readline().strip()
         titles = aline.split(' ')
@@ -46,61 +46,61 @@ if __name__ == '__main__':
         for aline in in_handle:
             aline = aline.strip().split(' ')
             aname = aline[1] + '_' + aline[0]  # key = Имя_Фамилия
-            name_dept.append( {aname: aline[2]} )
-            name_salary.append( {aname: aline[3]} )
+            name_dept[aname] = aline[2]
+            name_salary[aname] = aline[3]
 #
 # 1 Посчитайте сколько отделов на фирме
     arr_dept = []  # item = [ Отдел ]
-    for adept in name_dept:
-        print(adept)
-        dept = list(adept.values())[0]
+    for aname in name_dept:
+        adept = name_dept[aname]
+#        print(aname, adept)
         if adept not in arr_dept:
             arr_dept.append(adept)
 #
     with open(out_file, 'a', encoding='utf-8') as out_handle:
-        print("Количество отделов :", len(arr_dept), file=out_handle)
+        print("\n\nКоличество отделов :", len(arr_dept), file=out_handle)
+        print("\nСписок отделов :", file=out_handle)
         counter = 0
         for adept in arr_dept:
-            print(counter+1, dept, file=out_handle)
+            print(counter+1, titles[2], adept, file=out_handle)
             counter += 1
 #
 # 2 Определите максимальную зарплату
     salary_max = 0
     for aname in name_salary:
-        asalary = int(list(aname.values())[0])
+        asalary = int(name_salary[aname])
         if salary_max < asalary:
             salary_max = asalary
 #
     with open(out_file, 'a', encoding='utf-8') as out_handle:
-        print("\nМаксимальная зарплата на фирме :", salary_max, file=out_handle)
+        print("\n\nМаксимальная зарплата на фирме :", salary_max, file=out_handle)
 #
 # 3 Определите максимальную зарплату в каждом отделе
 # 4 Выведите «Отдел Макс_Зарплата  Фамилия_человека_с_такой_зарплатой» в новый файл
 # (составляется список {отдел : сотрудник_с максимальной_зарплатой}
-    dept_maxname = []  # item = { key: dept, value: Имя_Фамилия_с_макс_зарплатой }
+    dept_maxname = {}  # item = { key: dept, value: Имя_Фамилия_с_макс_зарплатой }
     for aname in name_dept:
-        aname = list(aname.keys())[0]
         adept = name_dept[aname]
         asalary = int(name_salary[aname])
-        print(aname, adept, asalary)
+#        print(aname, adept, asalary)
         if adept in dept_maxname:
             maxname = dept_maxname[adept]
             maxsalary = int(name_salary[maxname])
             if asalary > maxsalary:
                 dept_maxname[adept] = aname
         else:
-            dept_maxname.append( {adept: aname} )
+            dept_maxname[adept] = aname
+            # dept_maxname.append( {adept: aname} )
 #
 # 4 Выведите «Отдел Макс_Зарплата  Фамилия_человека_с_такой_зарплатой» в новый файл
     with open(out_file, 'a', encoding='utf-8') as out_handle:
-        print("\nМаксимальная зарплата по отделам", file=out_handle)
+        print("\n\nМаксимальная зарплата по отделам", file=out_handle)
         counter = 0
         for adept in dept_maxname:
-            adept = list(adept.keys())[0]
             aname = dept_maxname[adept]
             asalary = int(name_salary[aname])
-            print(adept, asalary, aname)
-            print(counter + 1, adept, asalary, aname, file=out_handle)
+#            print(adept, asalary, aname)
+            print(counter + 1, titles[2], adept, titles[3], asalary, 'name', aname, file=out_handle)
             counter += 1
 #
 #
