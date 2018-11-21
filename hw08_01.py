@@ -1,5 +1,6 @@
 import unittest
 from selenium.webdriver import Firefox
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class Wrapper(object):  # pattern SINGLETON
