@@ -1,8 +1,20 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver import ActionChains
 # import time
 
 search_url = "https://duckduckgo.com/"
+base_url = "http://automationpractice.com"
+
+# Navigation locators
+logo_loc = "img.logo"
+search_loc = "input.search_query"
+lens_loc = "button.button-search"
+cart_loc = "div.shopping_cart a"
+cat1_loc = "a[title='Women']"  # WOMEN
+cat2_loc = "a[title='Dresses']"  # DRESSES
+cat3_loc = "a[title='T-shirts']"  # T-SHIRTS
 
 # driver = webdriver.Edge()
 # driver.implicitly_wait(30)
@@ -10,10 +22,45 @@ wd = webdriver.Edge()
 # wd = webdriver.Firefox()
 wd.implicitly_wait(3)
 
-wd.get(search_url)
+
+def open_main_page():
+    wd.get(base_url)
 # wd.maximize_window()
 # time.sleep(2)
 # wd.minimize_window()
+
+
+def is_element_present(driver, by, locator):
+    try:
+        element = driver.find_element(by, locator)
+    except NoSuchElementException:
+        return False
+    return element
+
+
+def type_search(search_text):
+    open_main_page()
+    element = is_element_present(wd, By.CSS_SELECTOR, search_loc)
+    if element:
+        element.clear()
+        element.send_keys(search_text)
+        button = is_element_present(wd, By.CSS_SELECTOR, lens_loc)
+        button.click()
+
+
+def open_cart():
+    element = is_element_present(wd, By.CSS_SELECTOR, cart_loc)
+    if element:
+        assert 'Cart' in element.text
+        element.click()
+
+
+def open_women_popup():
+    element = is_element_present(wd, By.CSS_SELECTOR, cat1_loc)
+    if element:
+        action = webdriver.ActionChains(wd)
+
+
 
 elements = wd.find_elements(By.ID, "wedonttrack")
 print("By.ID wedonttrack = {}".format(len(elements)))
