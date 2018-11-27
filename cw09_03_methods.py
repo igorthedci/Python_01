@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver import ActionChains
-# import time
+import time
 
 search_url = "https://duckduckgo.com/"
 base_url = "http://automationpractice.com"
@@ -16,26 +16,35 @@ cat1_loc = "a[title='Women']"  # WOMEN
 cat2_loc = "a[title='Dresses']"  # DRESSES
 cat3_loc = "a[title='T-shirts']"  # T-SHIRTS
 
-# driver = webdriver.Edge()
-# driver.implicitly_wait(30)
-wd = webdriver.Edge()
-# wd = webdriver.Firefox()
-wd.implicitly_wait(3)
+# Search locators
+search_string = "top"
+search_token_loc = "span.navigation_page"
+search_counter_loc = "span.heading-counter"
+negative_search_loc = "span.lighter"
+positive_search_loc = "p.alert.alert-warning"
 
 
-def open_main_page():
-    wd.get(base_url)
-# wd.maximize_window()
-# time.sleep(2)
-# wd.minimize_window()
+def log_print(values):
+    print(values, end=' ')
+    yield
+    print(values)
 
 
 def is_element_present(driver, by, locator):
     try:
+        log_print("Looking for {} locator {}".format(by, locator))
         element = driver.find_element(by, locator)
     except NoSuchElementException:
+        log_print("FAIL")
         return False
+    log_print("PASS")
     return element
+
+
+def open_main_page():
+    wd.get(base_url)
+    log_print("Read the browser title (My Store)")
+    log_print(wd.title)
 
 
 def type_search(search_text):
@@ -48,56 +57,49 @@ def type_search(search_text):
         button.click()
 
 
-def open_cart():
-    element = is_element_present(wd, By.CSS_SELECTOR, cart_loc)
+def test_search_result(search_string):
+    element = is_element_present(wd, By.CSS_SELECTOR, search_loc)
     if element:
-        assert 'Cart' in element.text
-        element.click()
+        # assert "Search" in element.text
+        print("Found an element with text ({})".format(element.text))
+        element = is_element_present(wd, By.CSS_SELECTOR, search_counter_loc)
+        num_items = int(element.text.split()[0])
+        print("The number of found items is {}".format(num_items))
+        # if num_items:  # results are/greater 1
+        #     element = is_element_present(wd, By.CSS_SELECTOR, positive_search_loc)))
+        # else  # result = 0
+        #     element = is_element_present(wd, By.CSS_SELECTOR, negative_search_loc)))
+
+
+# def open_cart():
+#     element = is_element_present(wd, By.CSS_SELECTOR, cart_loc)
+#     if element:
+#         assert 'Cart' in element.text
+#         element.click(2)
 
 
 def open_women_popup():
     element = is_element_present(wd, By.CSS_SELECTOR, cat1_loc)
     if element:
-        action = webdriver.ActionChains(wd)
+        action = ActionChains(wd).move_to_element(element).perform()
+        # test_women_popup()
+        time.sleep(2)
 
 
+if __name__ == '__main__':
 
-elements = wd.find_elements(By.ID, "wedonttrack")
-print("By.ID wedonttrack = {}".format(len(elements)))
-elements = wd.find_elements_by_id("wedonttrack")
-print("by_id wedonttrack = {}".format(len(elements)))
+    # driver = webdriver.Edge()
+    # driver.implicitly_wait(30)
+    wd = webdriver.Edge()
+    # wd = webdriver.Firefox()
 
-elements = wd.find_elements(By.NAME, "q")
-print("By.NAME q = {}".format(len(elements)))
-elements = wd.find_elements_by_name("q")
-print("by_name q = {}".format(len(elements)))
+    wd.implicitly_wait(3)
 
-tmp_class_name = "js-onboarding-ed-arrow"
-elements = wd.find_elements_by_class_name(tmp_class_name)
-print("by_class_name {} = {}".format(tmp_class_name, len(elements)))
-elements = wd.find_elements(By.CLASS_NAME, tmp_class_name)
-print("by.CLASS_NAME {} = {}".format(tmp_class_name, len(elements)))
+    open_main_page()  # Test the main page
 
-tmp_css = "span.js-onboarding-ed-back-to-search"
-elements = wd.find_elements(By.CSS_SELECTOR, tmp_css)
-print("By.CSS_SELECTOR {} = {}, text = {}".format(tmp_css, len(elements), elements[0].text))
-elements = wd.find_elements_by_css_selector(tmp_css)
-print("by.CLASS_NAME {} = {}, text = {}".format(tmp_css, len(elements), elements[0].text))
-
-# elements = wd.find_elements_by_link_text()
-
-elements = wd.find_elements(By.PARTIAL_LINK_TEXT, "DuckDuckGo")
-print("By.PARTIAL_LINK_TEXT DucDuckGo = {}".format(len(elements)))
-elements = wd.find_elements_by_partial_link_text("DuckDuckGo")
-print("by_partial_link_text DucDuckGo = {}".format(len(elements)))
-
-# elements = wd.find_elements_by_tag_name()
-
-tmp_xpath = "//*[contains(@class,'js-onboarding-ed-dismiss')]"
-elements = wd.find_elements_by_xpath(tmp_xpath)
-print("by_xpath {} = {}".format(tmp_xpath, len(elements)))
-elements = wd.find_elements(By.XPATH, tmp_xpath)
-print("By.XPATH {} = {}".format(tmp_xpath, len(elements)))
+    type_search(search_string)  # Test the search method
+    test_search_result(search_string)
 
 
-wd.close()
+    wd.close()
+
