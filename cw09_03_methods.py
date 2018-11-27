@@ -1,8 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver import ActionChains
+from selenium.webdriver.common.action_chains import ActionChains
+# from selenium.webdriver.common.keys import Keys
 import time
+import requests
 
 search_url = "https://duckduckgo.com/"
 base_url = "http://automationpractice.com"
@@ -12,9 +14,12 @@ logo_loc = "img.logo"
 search_loc = "input.search_query"
 lens_loc = "button.button-search"
 cart_loc = "div.shopping_cart a"
-cat1_loc = "a[title='Women']"  # WOMEN
-cat2_loc = "a[title='Dresses']"  # DRESSES
-cat3_loc = "a[title='T-shirts']"  # T-SHIRTS
+cat1_women_loc = "a[title='Women']"  # WOMEN
+cat1_dresses_loc = "a[title='Dresses']"  # DRESSES
+cat1_tshirts_loc = "a[title='T-shirts']"  # T-SHIRTS
+cat2_tops_loc = "a.sf-with-ul[title='Tops']"  # WOMEN > TOPS
+cat2_dresses_loc = "a.sf-with-ul[title='Dresses']"  # WOMEN > DRESSES
+cat3_tshirts_loc = "a[title='T-shirts']"
 
 # Search locators
 search_string = "top"
@@ -47,7 +52,7 @@ def open_main_page():
     log_print(wd.title)
 
 
-def type_search(search_text):
+def type_search_text(search_text):
     open_main_page()
     element = is_element_present(wd, By.CSS_SELECTOR, search_loc)
     if element:
@@ -79,11 +84,40 @@ def test_search_result(search_string):
 
 
 def open_women_popup():
-    element = is_element_present(wd, By.CSS_SELECTOR, cat1_loc)
+    element = is_element_present(wd, By.CSS_SELECTOR, cat1_women_loc)
     if element:
-        action = ActionChains(wd).move_to_element(element).perform()
+        mouse = ActionChains(wd)
+        mouse.move_to_element(element).perform()
         # test_women_popup()
         time.sleep(2)
+    return element
+
+
+def test_women_popup():
+    element = open_women_popup()
+    if element:
+        sub_el = test_link_200(wd, By.CSS_SELECTOR, cat2_tops_loc)
+        sub_el = test_link_200(wd, By.CSS_SELECTOR, cat2_dresses_loc)
+        sub_el = is_element_present(wd, By.CSS_SELECTOR, cat2_tops_loc)
+        if sub_el == False:
+            return False
+
+        sub_link = sub_el.get_attribute("href")
+        response = requests.get(sub_link)
+        assert response.status_code == 200
+        sub_el = is_element_present(wd, By.CSS_SELECTOR, cat2_dresses_loc)
+        if sub_el == False:
+            return False
+
+
+def test_link_200(driver, by, locator):
+    element = is_element_present(driver, by, locator)
+    if element:
+        href_link = element.get_attribute("href")
+        response = requests.get(href_link)
+        if response != 200:
+            return false
+    return element
 
 
 if __name__ == '__main__':
@@ -97,9 +131,11 @@ if __name__ == '__main__':
 
     open_main_page()  # Test the main page
 
-    type_search(search_string)  # Test the search method
+    type_search_text(search_string)  # Test the search method
     test_search_result(search_string)
 
+    open_women_popup()
+    test_women_popup()
 
-    wd.close()
+    # wd.close()
 
