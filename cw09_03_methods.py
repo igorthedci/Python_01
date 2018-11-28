@@ -11,9 +11,12 @@ base_url = "http://automationpractice.com"
 
 # Navigation locators
 logo_loc = "img.logo"
-search_loc = "input.search_query"
+search_loc = "search_query_top"
 lens_loc = "button.button-search"
 cart_loc = "div.shopping_cart a"
+
+breadcrumb_search_loc = "div.breadcrumb span[title='Search']"
+
 cat1_women_loc = "a[title='Women']"  # WOMEN
 cat1_dresses_loc = "a[title='Dresses']"  # DRESSES
 cat1_tshirts_loc = "a[title='T-shirts']"  # T-SHIRTS
@@ -23,6 +26,7 @@ cat3_tshirts_loc = "a[title='T-shirts']"
 
 # Search locators
 search_string = "top"
+search_title_loc = "h1.page-heading"
 search_token_loc = "span.navigation_page"
 search_counter_loc = "span.heading-counter"
 negative_search_loc = "span.lighter"
@@ -48,22 +52,31 @@ def is_element_present(driver, by, locator):
 
 def open_main_page():
     wd.get(base_url)
-    log_print("Read the browser title (My Store)")
-    log_print(wd.title)
+    print("The home page has title", wd.title)
+    assert wd.title == "My Store"
 
 
 def type_search_text(search_text):
     open_main_page()
-    element = is_element_present(wd, By.CSS_SELECTOR, search_loc)
+    element = is_element_present(wd, By.ID, search_loc)
+    print("Looking for the Search title:", "PASS" if element else "FAIL")
     if element:
         element.clear()
         element.send_keys(search_text)
         button = is_element_present(wd, By.CSS_SELECTOR, lens_loc)
+        print("Looking for the Lens button:", "PASS" if button else "FAIL")
         button.click()
 
 
 def test_search_result(search_string):
+    print("Search string: {}. Testing result page".format(search_string))
+    print("Looking for 'Search' in the title:", "PASS" if 'Search' in wd.title else "FAIL")
+#
+    element = is_element_present(wd, By.CSS_SELECTOR, breadcrumb_search_loc)
+    print("Looking for the Search breadcrumb:", "PASS" if element else "FAIL")
+#
     element = is_element_present(wd, By.CSS_SELECTOR, search_loc)
+    print("Looking for 'Search' in the title:", "PASS" if 'Search' in wd.title else "FAIL")
     if element:
         # assert "Search" in element.text
         print("Found an element with text ({})".format(element.text))
