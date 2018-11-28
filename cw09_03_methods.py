@@ -89,12 +89,16 @@ def open_women_popup():
         mouse = ActionChains(wd)
         mouse.move_to_element(element).perform()
         # test_women_popup()
-        time.sleep(2)
+        # time.sleep(2)
+        popup = is_element_present(wd, By.CSS_SELECTOR,
+                                   cat1_women_loc+" [style='display: block;']")  # wait for the popup
     return element
 
 
 def test_women_popup():
     element = open_women_popup()
+    if not is_hrefs_200(element):
+        return False
     if element:
         sub_el = test_link_200(wd, By.CSS_SELECTOR, cat2_tops_loc)
         sub_el = test_link_200(wd, By.CSS_SELECTOR, cat2_dresses_loc)
@@ -108,16 +112,30 @@ def test_women_popup():
         sub_el = is_element_present(wd, By.CSS_SELECTOR, cat2_dresses_loc)
         if sub_el == False:
             return False
+    return element
 
 
 def test_link_200(driver, by, locator):
     element = is_element_present(driver, by, locator)
     if element:
         href_link = element.get_attribute("href")
-        response = requests.get(href_link)
-        if response != 200:
-            return false
+        response = requests.head(href_link)
+        print("Test link: {} Status: {}".format(href_link, response.status_code))
+        if response.status_code != 200:
+            return False
     return element
+
+
+def is_hrefs_200(element):
+    if element:
+        href_elements = element.find_elements(By.CSS_SELECTOR, " [href='*']")  # loop with all href-heirs
+        for href in href_elements:
+            link = href.get_attribute("href")
+            response = requests.head(link)
+            print("Test link: {} Status: {}".format(link, response.status_code))
+            if response.status_code != 200:  # is the link vital
+                return False
+    return True
 
 
 if __name__ == '__main__':
