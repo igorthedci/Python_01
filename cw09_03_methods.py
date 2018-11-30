@@ -168,5 +168,5 @@ if __name__ == '__main__':
     open_women_popup()
     test_women_popup()
 
-    # wd.close()
+    wd.close()
 
