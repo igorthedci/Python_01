@@ -63,12 +63,12 @@ class BaseTestCase(unittest.TestCase):
         self.driver.implicitly_wait(30)
 
     def tearDown(self):
-        # self.driver.close()
+        self.driver.close()
 
 
 class GoogleTesting(BaseTestCase):
     def test_search1(self, page=GoogleHomePage()):
         # page = GoogleHomePage()
         page.open()
-        page.search = "Automated testing\n"
+        page.search = "Automated testing"
         assert "Test automation" in page.first_link
