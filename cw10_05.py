@@ -1,48 +1,26 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
-# from selenium.webdriver.common.keys import Keys
 import time
-import requests
 
 base_url = "http://127.0.0.1/oxwall"
 
-# Navigation locators
+# TOP NAVIGATOR
 signin_button = (By.CSS_SELECTOR, "span.ow_signin_label")
 user_profile_icon = (By.XPATH, "//div[contains(@class,'ow_console_dropdown_hover')]")
+user_menu_signout = (By.XPATH, "//div[@class='ow_console_dropdown_cont']/a")
 
-# search_loc = "search_query_top"
-# lens_loc = "button.button-search"
-# cart_loc = "div.shopping_cart a"
-
-# breadcrumb_search_loc = "div.breadcrumb span[title='Search']"
-#
-# cat1_women_loc = "a[title='Women']"  # WOMEN
-# cat1_dresses_loc = "a[title='Dresses']"  # DRESSES
-# cat1_tshirts_loc = "a[title='T-shirts']"  # T-SHIRTS
-# cat2_tops_loc = "a.sf-with-ul[title='Tops']"  # WOMEN > TOPS
-# cat2_dresses_loc = "a.sf-with-ul[title='Dresses']"  # WOMEN > DRESSES
-# cat3_tshirts_loc = "a[title='T-shirts']"
-
+# SIGN IN POPUP
 signin_title = (By.XPATH, "//h3[@class='ow_ic_file']")
 signin_name_field = (By.XPATH, "//*[@class='ow_user_name']/input")
 signin_password_field = (By.XPATH, "//*[@class='ow_password']/input")
 signin_remember_checkbox = (By.XPATH, "//*[@name='remember']")
 signin_signin_button = (By.XPATH, "//span[@class=' ow_positive']")
 
-
-# Search locators
-# search_string = "top"
-# search_title_loc = "h1.page-heading"
-# search_token_loc = "span.navigation_page"
-# search_counter_loc = "span.heading-counter"
-# negative_search_loc = "span.lighter"
-# positive_search_loc = "p.alert.alert-warning"
-
-
+# NEWS
 news_input = (By.XPATH, "//textarea[@name='status']")
 news_input_submit = (By.XPATH, "//input[@name='save']")
+news_content = (By.XPATH, "//div[contains(@class,'ow_newsfeed_content')]")
 
 
 def open_main_page():
@@ -83,9 +61,32 @@ def type_news_feed(my_news):
     element = wd.find_element(*news_input)
     element.clear()
     element.send_keys(my_news)
+
     element = wd.find_element(*news_input_submit)
     element.click()
+    time.sleep(2)
 
+    print("Looking the newsfeed for new text...", end='')
+    elements = wd.find_elements(*news_content)
+
+    for element in elements:
+        if my_news in element.text:
+            print('PASS')
+            break
+    else:
+        print('FAIL')
+
+
+def user_signout():
+    elements = wd.find_elements(*user_profile_icon)
+    element = elements[0]  # user icon is #0
+    mouse_cursor = ActionChains(wd)
+    mouse_cursor.move_to_element(element).perform()
+    time.sleep(2)
+
+    elements = wd.find_elements(*user_menu_signout)
+    element = elements[5]
+    element.click()
 
 
 if __name__ == '__main__':
@@ -103,5 +104,7 @@ if __name__ == '__main__':
 
     type_news_feed("its my news")
 
-    # wd.close()
+    user_signout()
+
+    wd.close()
 
